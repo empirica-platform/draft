@@ -1,0 +1,39 @@
+{
+  "name": "empirica-platform/terminal",
+  "autoload": {
+    "classmap": ["contracts"],
+    "psr-4": {
+      "EmpiricaPlatform\\BinanceExecutor\\": "binance-executor/src/",
+      "EmpiricaPlatform\\BinanceProvider\\": "binance-provider/src/",
+      "EmpiricaPlatform\\PeriodicProvider\\": "periodic-provider/src/",
+      "EmpiricaPlatform\\Terminal\\": "terminal/src/",
+      "EmpiricaPlatform\\Plot\\": "plot/src/"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "davefx/phplot": "^6.2",
+    "nxp/math-executor": "^2.1",
+    "markrogoyski/math-php": "2.*",
+    "symfony/console": "^6.2",
+    "php-ai/php-ml": "^0.10.0",
+    "symfony/dependency-injection": "^6.2",
+    "lupecode/php-trader-native": "^1.2",
+    "zkrat/draw-ohlc": "^0.0.3",
+    "tracy/tracy": "^2.9",
+    "symfony/event-dispatcher": "^6.2",
+    "symfony/config": "^6.2",
+    "wapmorgan/unified-archive": "^1.1",
+    "guzzlehttp/guzzle": "^7.5",
+    "symfony/yaml": "^6.2",
+    "symfony/expression-language": "^6.2",
+    "symfony/messenger": "^6.2",
+    "symfony/framework-bundle": "^6.2",
+    "symfony/runtime": "^6.2"
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
+  }
+}
