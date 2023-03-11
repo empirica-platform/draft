@@ -1,10 +1,10 @@
 <?php
 
-namespace EmpiricaPlatform\BinanceProvider;
+namespace EmpiricaPlatform\BinanceHistory;
 
-use EmpiricaPlatform\BinanceProvider\ValueObject\Ohlc;
-use EmpiricaPlatform\BinanceProvider\ValueObject\Price;
-use EmpiricaPlatform\BinanceProvider\ValueObject\Volume;
+use EmpiricaPlatform\BinanceHistory\ValueObject\Ohlc;
+use EmpiricaPlatform\BinanceHistory\ValueObject\Price;
+use EmpiricaPlatform\BinanceHistory\ValueObject\Volume;
 use EmpiricaPlatform\Contracts\OhlcInterface;
 use EmpiricaPlatform\Contracts\OhlcIteratorInterface;
 use EmpiricaPlatform\Contracts\SymbolPairInterface;

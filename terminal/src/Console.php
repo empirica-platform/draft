@@ -28,8 +28,8 @@ class Console extends Command
     {
         $this
             ->setName($_SERVER['argv'][0])
-            ->setHelp('This command allows you to create a user...')
-            ->addOption('config-file', 'f', InputArgument::OPTIONAL, 'Config file', $this->getProjectDir().'/config.yaml')
+            ->setHelp('Runner for development, execution and backtesting trading strategies')
+            ->addOption('config-file', 'f', InputArgument::OPTIONAL, 'Config yaml file', $this->getProjectDir().'/config.yaml')
             ->addOption('output-dir', 'o', InputArgument::OPTIONAL, 'Output directory', $this->getProjectDir().'/output')
             ->addOption('cache-dir', 'c', InputArgument::OPTIONAL, 'Cache directory', $this->getProjectDir().'/cache')
         ;

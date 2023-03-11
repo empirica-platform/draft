@@ -1,6 +1,6 @@
 <?php
 
-namespace EmpiricaPlatform\BinanceProvider\ValueObject;
+namespace EmpiricaPlatform\BinanceHistory\ValueObject;
 
 use EmpiricaPlatform\Contracts\OhlcInterface;
 use EmpiricaPlatform\Contracts\PriceInterface;

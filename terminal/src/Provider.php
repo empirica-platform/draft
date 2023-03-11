@@ -22,7 +22,6 @@ class Provider
 
     public function emitDataEvent(ConsoleCommandEvent $event): void
     {
-        $this->output->writeln('projectDir: ' . $this->projectDir);
         foreach ($this->iterator as $ohlc) {
             $this->dispatcher->dispatch(new DataEvent($ohlc));
         }

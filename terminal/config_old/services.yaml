@@ -47,7 +47,7 @@ services:
     class: EmpiricaPlatform\Terminal\ValueObject\SymbolPair
     arguments: ['@data_symbol_base', '@data_symbol_quote']
   data_iterator:
-    class: EmpiricaPlatform\PeriodicProvider\OhlcIterator
+    class: EmpiricaPlatform\PeriodicHistory\OhlcIterator
     arguments: ['@data_symbol_pair']
     #arguments: ['@data_symbol_pair', '%data_source_file%', '%data_work_dir%']
   data:

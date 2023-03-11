@@ -17,7 +17,10 @@ use EmpiricaPlatform\Plot\MovingAverage\Sma;
 use EmpiricaPlatform\Terminal\Event\DataEvent;
 use EmpiricaPlatform\Terminal\Event\EndEvent;
 use Nette\Utils\DateTime;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('kernel.event_listener', ['method' => 'addOhlc', 'event' => DataEvent::class])]
+#[AutoconfigureTag('kernel.event_listener', ['method' => 'renderFile', 'event' => EndEvent::class])]
 class Plot
 {
     public function __construct(

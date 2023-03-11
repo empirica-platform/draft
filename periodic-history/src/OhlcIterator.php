@@ -1,13 +1,13 @@
 <?php
 
-namespace EmpiricaPlatform\PeriodicProvider;
+namespace EmpiricaPlatform\PeriodicHistory;
 
 use EmpiricaPlatform\Contracts\SymbolPairInterface;
 use EmpiricaPlatform\Contracts\OhlcInterface;
 use EmpiricaPlatform\Contracts\OhlcIteratorInterface;
-use EmpiricaPlatform\PeriodicProvider\ValueObject\Ohlc;
-use EmpiricaPlatform\PeriodicProvider\ValueObject\Price;
-use EmpiricaPlatform\PeriodicProvider\ValueObject\Volume;
+use EmpiricaPlatform\PeriodicHistory\ValueObject\Ohlc;
+use EmpiricaPlatform\PeriodicHistory\ValueObject\Price;
+use EmpiricaPlatform\PeriodicHistory\ValueObject\Volume;
 use DateTimeImmutable;
 use ReturnTypeWillChange;
 

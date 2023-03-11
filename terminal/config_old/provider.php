@@ -1,7 +1,7 @@
 <?php
 
 use DrawOHLC\HistoryData\OhlcList;
-use EmpiricaPlatform\PeriodicProvider\OhlcIterator;
+use EmpiricaPlatform\PeriodicHistory\OhlcIterator;
 use EmpiricaPlatform\Terminal\Provider;
 use EmpiricaPlatform\Terminal\Event\ConsoleCommandEvent;
 use EmpiricaPlatform\Terminal\ValueObject\Symbol;

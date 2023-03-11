@@ -1,6 +1,6 @@
 <?php
 
-namespace EmpiricaPlatform\PeriodicProvider\ValueObject;
+namespace EmpiricaPlatform\PeriodicHistory\ValueObject;
 
 use EmpiricaPlatform\Contracts\PriceInterface;
 
