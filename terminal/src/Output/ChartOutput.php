@@ -18,15 +18,16 @@ use EmpiricaPlatform\Terminal\Event\ConsoleTerminateEvent;
 use EmpiricaPlatform\Terminal\Event\HistoryDataEvent;
 use Nette\Utils\DateTime;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 #[AutoconfigureTag('kernel.event_listener', ['method' => 'addOhlc', 'event' => HistoryDataEvent::class])]
 #[AutoconfigureTag('kernel.event_listener', ['method' => 'renderFile', 'event' => ConsoleTerminateEvent::class])]
 class ChartOutput
 {
     public function __construct(
-        private OhlcList $csvOhlc,
-        private DrawCanvas $canvas,
-        private string $file
+        #[Autowire(service: 'plot_list')] private OhlcList $csvOhlc,
+        #[Autowire(service: 'plot_canvas')] private DrawCanvas $canvas,
+        #[Autowire('%plot_file%')] private string $file
     )
     {
     }
