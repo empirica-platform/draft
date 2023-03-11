@@ -1,3 +1,7 @@
-
-parameters:
-    empirica.project_dir: 'empirica'
+services:
+    event_dispatcher:
+        class: Symfony\Component\EventDispatcher\EventDispatcher
+        public: true
+    EmpiricaPlatform\Terminal\EventListener\:
+        autoconfigure: true
+        resource: 'src/EventListener/'

@@ -5,7 +5,7 @@ namespace EmpiricaPlatform\Terminal;
 use EmpiricaPlatform\Contracts\OhlcIteratorInterface;
 use EmpiricaPlatform\Terminal\Event\DataEvent;
 use EmpiricaPlatform\Terminal\Event\EndEvent;
-use EmpiricaPlatform\Terminal\Event\InitEvent;
+use EmpiricaPlatform\Terminal\Event\ConsoleCommandEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,7 +20,7 @@ class Provider
     {
     }
 
-    public function emitDataEvent(InitEvent $event): void
+    public function emitDataEvent(ConsoleCommandEvent $event): void
     {
         $this->output->writeln('projectDir: ' . $this->projectDir);
         foreach ($this->iterator as $ohlc) {

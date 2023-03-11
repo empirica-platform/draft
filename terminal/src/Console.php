@@ -2,9 +2,13 @@
 
 namespace EmpiricaPlatform\Terminal;
 
+use EmpiricaPlatform\Terminal\Event\ConsoleCommandEvent;
+use EmpiricaPlatform\Terminal\Event\ConsoleTerminateEvent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,8 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class Command extends BaseCommand
+class Console extends Command
 {
     protected ?ContainerBuilder $container;
     protected bool $running = false;
@@ -34,14 +39,27 @@ class Command extends BaseCommand
     {
         $configFile = $input->getOption('config-file');
         if (!file_exists($configFile)) {
-            throw new \InvalidArgumentException(sprintf('Cannot find config file "%s".', $configFile));
+            throw new InvalidArgumentException(sprintf('Cannot find config file "%s".', $configFile));
         }
-
+        $outputDir = $input->getOption('output-dir');
+        if (!file_exists($outputDir)) {
+            throw new InvalidArgumentException(sprintf('Cannot find output directory "%s".', $outputDir));
+        }
+        if (!is_writable($outputDir)) {
+            throw new RuntimeException(sprintf('Unable to write in the "%s" directory.', $outputDir));
+        }
+        $cacheDir = $input->getOption('cache-dir');
+        if (!file_exists($cacheDir)) {
+            throw new InvalidArgumentException(sprintf('Cannot find cache directory "%s".', $cacheDir));
+        }
+        if (!is_writable($cacheDir)) {
+            throw new RuntimeException(sprintf('Unable to write in the "%s" directory.', $cacheDir));
+        }
         $parameters = new ParameterBag([
             'empirica.project_dir' => $this->getProjectDir(),
             'empirica.config_file' => $configFile,
-            'empirica.output_dir' => $input->getOption('output-dir'),
-            'empirica.cache_dir' => $input->getOption('cache-dir'),
+            'empirica.output_dir' => $outputDir,
+            'empirica.cache_dir' => $cacheDir,
         ]);
         $this->container = new ContainerBuilder($parameters);
         $this->container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
@@ -50,13 +68,15 @@ class Command extends BaseCommand
         $loader->load($configFile);
         $this->container->compile();
 
-        $output->writeln([
-            '1',
-            '2',
-            $this->container->getParameter('empirica.project_dir'),
-        ]);
+        /** @var EventDispatcherInterface $container */
+        $dispatcher = $this->container->get('event_dispatcher');
+        if (!$dispatcher) {
+            throw new RuntimeException('Cannot find "event_dispatcher" service.');
+        }
+        $dispatcher->dispatch(new ConsoleCommandEvent($this, $input, $output));
+        $dispatcher->dispatch(new ConsoleTerminateEvent($this, $input, $output, static::SUCCESS));
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     public function run(InputInterface $input = null, OutputInterface $output = null): int
@@ -74,7 +94,7 @@ class Command extends BaseCommand
             $this->running = false;
         }
 
-        return $ret ?? 1;
+        return $ret ?? static::FAILURE;
     }
 
     public function getProjectDir(): string

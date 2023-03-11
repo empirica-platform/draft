@@ -3,5 +3,5 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-$command = new EmpiricaPlatform\Terminal\Command();
+$command = new EmpiricaPlatform\Terminal\Console();
 $command->run();

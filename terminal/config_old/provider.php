@@ -3,7 +3,7 @@
 use DrawOHLC\HistoryData\OhlcList;
 use EmpiricaPlatform\PeriodicProvider\OhlcIterator;
 use EmpiricaPlatform\Terminal\Provider;
-use EmpiricaPlatform\Terminal\Event\InitEvent;
+use EmpiricaPlatform\Terminal\Event\ConsoleCommandEvent;
 use EmpiricaPlatform\Terminal\ValueObject\Symbol;
 use EmpiricaPlatform\Terminal\ValueObject\SymbolPair;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -38,7 +38,7 @@ $container->register('data', Provider::class)
     ->setArgument('$output', new Reference('output'))
     ->setArgument('$projectDir', new Expression('getProjectDir()'))
     ->addTag('kernel.event_listener', [
-        'event' => InitEvent::class,
+        'event' => ConsoleCommandEvent::class,
         'method' => 'emitDataEvent',
     ])
 ;

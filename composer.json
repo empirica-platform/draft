@@ -4,8 +4,8 @@
     "classmap": ["contracts"],
     "psr-4": {
       "EmpiricaPlatform\\BinanceExecutor\\": "binance-executor/src/",
-      "EmpiricaPlatform\\BinanceProvider\\": "binance-provider/src/",
-      "EmpiricaPlatform\\PeriodicProvider\\": "periodic-provider/src/",
+      "EmpiricaPlatform\\BinanceHistory\\": "binance-history/src/",
+      "EmpiricaPlatform\\PeriodicHistory\\": "periodic-history/src/",
       "EmpiricaPlatform\\Terminal\\": "terminal/src/",
       "EmpiricaPlatform\\Plot\\": "plot/src/"
     }
