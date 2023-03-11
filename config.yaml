@@ -25,7 +25,7 @@ services:
         arguments: ['@data_symbol_pair']
         #arguments: ['@data_symbol_pair', '%data_source_file%', '%data_work_dir%']
 
-    EmpiricaPlatform\Terminal\EventEmitter\OhlcHistoryDataEmitter:
+    EmpiricaPlatform\Terminal\DataProvider\HistoryDataProvider:
         arguments: ['@event_dispatcher', '@data_iterator']
 
 
@@ -42,5 +42,5 @@ services:
             - [ setFontPath, [ '%plot_font%' ] ]
             - [ setFontSize, [ 10 ] ]
     plot:
-        class: EmpiricaPlatform\Terminal\Plot
+        class: EmpiricaPlatform\Terminal\Output\ChartOutput
         arguments: [ '@plot_list', '@plot_canvas', '%plot_file%' ]

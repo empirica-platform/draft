@@ -1,6 +1,6 @@
 <?php
 
-namespace EmpiricaPlatform\Terminal;
+namespace EmpiricaPlatform\Terminal\Output;
 
 use EmpiricaPlatform\Plot\DrawImage\DrawAvgVolume;
 use EmpiricaPlatform\Plot\DrawImage\DrawBgOhlcList;
@@ -14,14 +14,14 @@ use EmpiricaPlatform\Plot\DrawImage\Exception\DrawCanvasException;
 use EmpiricaPlatform\Plot\HistoryData\Ohlc;
 use EmpiricaPlatform\Plot\HistoryData\OhlcList;
 use EmpiricaPlatform\Plot\MovingAverage\Sma;
-use EmpiricaPlatform\Terminal\Event\DataEvent;
-use EmpiricaPlatform\Terminal\Event\EndEvent;
+use EmpiricaPlatform\Terminal\Event\ConsoleTerminateEvent;
+use EmpiricaPlatform\Terminal\Event\HistoryDataEvent;
 use Nette\Utils\DateTime;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('kernel.event_listener', ['method' => 'addOhlc', 'event' => DataEvent::class])]
-#[AutoconfigureTag('kernel.event_listener', ['method' => 'renderFile', 'event' => EndEvent::class])]
-class Plot
+#[AutoconfigureTag('kernel.event_listener', ['method' => 'addOhlc', 'event' => HistoryDataEvent::class])]
+#[AutoconfigureTag('kernel.event_listener', ['method' => 'renderFile', 'event' => ConsoleTerminateEvent::class])]
+class ChartOutput
 {
     public function __construct(
         private OhlcList $csvOhlc,
@@ -32,10 +32,10 @@ class Plot
     }
 
     /**
-     * @param DataEvent $ohlc
+     * @param HistoryDataEvent $ohlc
      * @return void
      */
-    public function addOhlc(DataEvent $ohlc): void
+    public function addOhlc(HistoryDataEvent $ohlc): void
     {
         Ohlc::create(
             DateTime::from($ohlc->ohlc->getDateTime()),
@@ -49,11 +49,11 @@ class Plot
     }
 
     /**
-     * @param EndEvent $event
+     * @param ConsoleTerminateEvent $event
      * @return void
      * @throws DrawCanvasException
      */
-    public function renderFile(EndEvent $event): void
+    public function renderFile(ConsoleTerminateEvent $event): void
     {
         $drawPrice = DrawOhlcList::create(
             $this->csvOhlc,
