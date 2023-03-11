@@ -1,48 +1,7 @@
 #!/usr/bin/env php
 <?php
-// run experiment
-
-use EmpiricaPlatform\Terminal\Expression\StringExpressionLanguageProvider;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Console\Application;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
-use Symfony\Component\Filesystem\Path;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-
-$parameters = new ParameterBag([
-    'init_command_name' => 'init',
-    'empirica.project_dir' => Path::join(__DIR__, '/../../'),
-]);
-$container = new ContainerBuilder($parameters);
-$containerBuilder = new ContainerBuilder();
-$container->addExpressionLanguageProvider(
-    new StringExpressionLanguageProvider()
-);
-$container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
-
-$loader = new YamlFileLoader($containerBuilder, new FileLocator(Path::join(__DIR__, '/../config')));
-$loader->load('services.yaml');
-
-#$loader = new PhpFileLoader($containerBuilder, new FileLocator(Path::join(__DIR__, '/../config')));
-#$loader->load('services.php');
-
-/*
-require __DIR__ . '/../config/runner.php';
-require __DIR__ . '/../config/provider.php';
-require __DIR__ . '/../config/buffer.php';
-require __DIR__ . '/../config/plot.php';
-require __DIR__ . '/../config/train.php';
-require __DIR__ . '/../config/predict.php';
-*/
-
-/** @var ContainerBuilder $container */
-$container->compile();
-$exitCode = $container->get('EmpiricaPlatform\Terminal\Runner\Application');
-exit($exitCode);
+$command = new EmpiricaPlatform\Terminal\Command();
+$command->run();
