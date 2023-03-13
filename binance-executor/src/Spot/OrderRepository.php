@@ -132,7 +132,8 @@ class OrderRepository extends DefaultRepository implements OrderRepositoryInterf
 	 * @return OrderInterface|null
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 */
-	public function findOne(FindCriteriaInterface $criteria): ?OrderInterface
+    // FindCriteriaParamsInterface
+	public function findOne(FindCriteriaParamsInterface $criteria): ?OrderInterface
 	{
 		$params = array_merge($this->defaultParams(), $criteria->makeParams());
 		$request = new Request('GET', '/api/v3/order?' . http_build_query($params));

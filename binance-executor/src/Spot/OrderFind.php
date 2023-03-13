@@ -3,13 +3,15 @@
 namespace Gri3li\BinanceExecutor\Spot;
 
 use DateTimeInterface;
+use EmpiricaPlatform\BinanceApi\FindParamsInterface;
 use Gri3li\BinanceApi\Stuff\Identifier;
 use EmpiricaPlatform\Contracts\FindCriteriaInterface;
 use EmpiricaPlatform\Contracts\IdentifierInterface;
 use EmpiricaPlatform\Contracts\SymbolPairInterface;
 
 // критерии нужно мапить так же как валуеобжекты
-class OrderFindCriteria implements FindCriteriaInterface
+// избавиться от критерия, передавать параметры на прямую
+class OrderFind implements FindCriteriaInterface, FindParamsInterface
 {
 	private SymbolPairInterface $symbolPair;
 	private ?IdentifierInterface $identifier = null;

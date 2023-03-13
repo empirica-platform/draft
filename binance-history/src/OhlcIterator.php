@@ -29,6 +29,7 @@ class OhlcIterator extends SplFileObject implements OhlcIteratorInterface
      * @throws ArchiveExtractionException
      * @throws GuzzleException
      */
+    // SymbolPair, timeFrame, timeFrom, timeTo
     public function __construct(
         protected SymbolPairInterface $symbolPair,
         string $sourceFile,

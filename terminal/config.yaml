@@ -1,0 +1,21 @@
+parameters:
+    data_source_file: 'https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1m/BTCUSDT-1m-2023-01-05.zip'
+    data_work_dir: '%empirica.project_dir%/var/binance'
+    plot_file: '%empirica.project_dir%/qwe3.png'
+    plot_font: '%empirica.project_dir%/vendor/zkrat/draw-ohlc/src/font/Hack-Regular.ttf'
+
+services:
+    _defaults:
+    #    autowire: true
+        autoconfigure: true
+
+    EmpiricaPlatform\Terminal\DataProvider\HistoryDataProvider:
+        autowire: true
+
+    data_iterator:
+        class: EmpiricaPlatform\PeriodicHistory\OhlcIterator
+        arguments: ['BTC', 'USDT', '2023-01-05', '2023-01-06', 'P1M']
+
+    plot:
+        class: EmpiricaPlatform\Terminal\Output\ChartOutput
+        autowire: true

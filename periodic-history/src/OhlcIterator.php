@@ -2,36 +2,45 @@
 
 namespace EmpiricaPlatform\PeriodicHistory;
 
-use EmpiricaPlatform\Contracts\SymbolPairInterface;
-use EmpiricaPlatform\Contracts\OhlcInterface;
-use EmpiricaPlatform\Contracts\OhlcIteratorInterface;
-use EmpiricaPlatform\PeriodicHistory\ValueObject\Ohlc;
-use EmpiricaPlatform\PeriodicHistory\ValueObject\Price;
-use EmpiricaPlatform\PeriodicHistory\ValueObject\Volume;
-use DateTimeImmutable;
-use ReturnTypeWillChange;
+use EmpiricaPlatform\Contracts\Ohlc;
 
-// https://en.wikipedia.org/wiki/Frequency
-class OhlcIterator implements OhlcIteratorInterface
+class OhlcIterator implements \Iterator
 {
-    private $index = 0;
+    protected string $baseSymbol;
+    protected string $quoteSymbol;
+    protected \DateTimeImmutable $timeFrom;
+    protected \DateTimeImmutable $timeTo;
+    protected \DateInterval $timeFrame;
 
-    public function __construct(
-        protected SymbolPairInterface $symbolPair,
-    )
+    private int $key = 0;
+
+    /**
+     * @param string $baseSymbol
+     * @param string $quoteSymbol
+     * @param string $timeFrom
+     * @param string $timeTo
+     * @param string $timeFrame
+     * @throws \Exception
+     */
+    public function __construct(string $baseSymbol, string $quoteSymbol, string $timeFrom, string $timeTo, string $timeFrame)
     {
+        $this->baseSymbol = $baseSymbol;
+        $this->quoteSymbol = $quoteSymbol;
+        $this->timeFrom = new \DateTimeImmutable($timeFrom);
+        $this->timeTo = new \DateTimeImmutable($timeTo);
+        $this->timeFrame = new \DateInterval($timeFrame);
     }
 
     public function rewind(): void
     {
-        $this->index = 0;
+        $this->key = 0;
     }
 
-    #[ReturnTypeWillChange] public function current(): OhlcInterface
+    public function current(): Ohlc
     {
         $vertical1 = 40;
         $xm = .2;
-        $xCurr = $this->index * $xm;
+        $xCurr = $this->key * $xm;
         $xPrev = $xCurr - $xm;
         $openValue = sin(M_PI * $xPrev) + $vertical1;
         $closeValue = sin(M_PI * $xCurr) + $vertical1;
@@ -40,34 +49,32 @@ class OhlcIterator implements OhlcIteratorInterface
         $vertical2 = 50;
         $volume = sin(2 * M_PI * ($xPrev - 1)) * 50 + $vertical2;
 
-        $dateTime = DateTimeImmutable::createFromMutable((new \DateTime())->setTime(0, $this->index));
-        $open = new Price(round($openValue, 2));
-        $high = new Price(round($openValue + $shadow, 2));
-        $low = new Price(round($closeValue - $shadow, 2));
-        $close = new Price(round($closeValue, 2));
-        $volume = new Volume(round($volume, 2));
+        $ohlc = new Ohlc(
+            \DateTimeImmutable::createFromMutable((new \DateTime())->setTime(0, $this->key)),
+            $this->baseSymbol,
+            $this->quoteSymbol,
+            round($openValue, 2),
+            round($openValue + $shadow, 2),
+            round($closeValue - $shadow, 2),
+            round($closeValue, 2),
+            round($volume, 2)
+        );
 
-        return new Ohlc($this->symbolPair, $dateTime, $open, $high, $low, $close, $volume);
+        return $ohlc;
     }
 
     public function key(): int
     {
-        return $this->index;
+        return $this->key;
     }
 
     public function next(): void
     {
-        ++$this->index;
+        ++$this->key;
     }
 
     public function valid(): bool
     {
-        return $this->index <= 500;
-    }
-
-    // not need count(), runtime ready
-    public function count(): int
-    {
-        return 500;
+        return $this->key <= 500;
     }
 }

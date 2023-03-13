@@ -24,27 +24,33 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AutoconfigureTag('kernel.event_listener', ['method' => 'renderFile', 'event' => ConsoleTerminateEvent::class])]
 class ChartOutput
 {
+    private OhlcList $csvOhlc;
+    private DrawCanvas $canvas;
+
     public function __construct(
-        #[Autowire(service: 'plot_list')] private OhlcList $csvOhlc,
-        #[Autowire(service: 'plot_canvas')] private DrawCanvas $canvas,
-        #[Autowire('%plot_file%')] private string $file
+        #[Autowire('%plot_file%')] private string $file,
+        #[Autowire('%plot_font%')] private string $font
     )
     {
+        $this->csvOhlc = OhlcList::create(0);
+        $this->canvas =  DrawCanvas::createCanvas(1000, 600);
+        $this->canvas->setFontPath($this->font);
     }
 
     /**
-     * @param HistoryDataEvent $ohlc
+     * @param HistoryDataEvent $event
      * @return void
      */
-    public function addOhlc(HistoryDataEvent $ohlc): void
+    public function addOhlc(HistoryDataEvent $event): void
     {
+
         Ohlc::create(
-            DateTime::from($ohlc->ohlc->getDateTime()),
-            $ohlc->ohlc->getOpen()->getValue(),
-            $ohlc->ohlc->getHigh()->getValue(),
-            $ohlc->ohlc->getLow()->getValue(),
-            $ohlc->ohlc->getClose()->getValue(),
-            $ohlc->ohlc->getVolume()->getValue(),
+            DateTime::from($event->ohlc->time),
+            $event->ohlc->openPrice,
+            $event->ohlc->highPrice,
+            $event->ohlc->lowPrice,
+            $event->ohlc->closePrice,
+            $event->ohlc->volume,
             $this->csvOhlc
         );
     }

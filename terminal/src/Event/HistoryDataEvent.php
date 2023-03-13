@@ -2,13 +2,13 @@
 
 namespace EmpiricaPlatform\Terminal\Event;
 
-use EmpiricaPlatform\Contracts\OhlcInterface;
+use EmpiricaPlatform\Contracts\Ohlc;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class HistoryDataEvent extends Event
 {
     public function __construct(
-        public OhlcInterface $ohlc
+        public readonly Ohlc $ohlc
     )
     {
     }
